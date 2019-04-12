@@ -13,14 +13,12 @@ class MainVerticle : AbstractVerticle() {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            println(111)
+            MainVerticle().start(Future.future(Handle()))
         }
     }
 
-
     override fun start(startFuture: Future<Void>) {
         val router = createRouter()
-
         vertx.createHttpServer()
                 .requestHandler(router)
                 .listen(config().getInteger("http.port", 8080)) { result ->
@@ -32,7 +30,7 @@ class MainVerticle : AbstractVerticle() {
                 }
     }
 
-    private fun createRouter() =  Router.router(vertx).apply {
+    private fun createRouter() = Router.router(vertx).apply {
         get("/").handler(handlerRoot)
         get("/islands").handler(handlerIslands)
         get("/countries").handler(handlerCountries)
