@@ -10,6 +10,14 @@ import io.vertx.ext.web.RoutingContext
 
 @Suppress("unused")
 class MainVerticle : AbstractVerticle() {
+    companion object {
+        @JvmStatic
+        fun main(args: Array<String>) {
+            println(111)
+        }
+    }
+
+
     override fun start(startFuture: Future<Void>) {
         val router = createRouter()
 
