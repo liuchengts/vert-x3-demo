@@ -7,7 +7,7 @@ import java.nio.charset.Charset
 
 class TCPClientApplication {
     var vertx: Vertx? = null
-    val PORT = 1814
+    val PORT = 1943
     val HOST = "localhost"
 
     init {
