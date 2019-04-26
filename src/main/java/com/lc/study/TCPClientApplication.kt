@@ -7,8 +7,8 @@ import java.nio.charset.Charset
 
 class TCPClientApplication {
     var vertx: Vertx? = null
-    val PORT = 1943
-    val HOST = "localhost"
+    val PORT = 502
+    val HOST = "192.168.100.27"
 
     init {
         vertx = Vertx.vertx()
@@ -27,14 +27,16 @@ class TCPClientApplication {
         val client = vertx!!.createNetClient(options)
         client.connect(PORT, HOST) { conn ->
             if (conn.succeeded()) {
-                println("客户端连接成功")
                 val socket = conn.result()
-                socket.write("你好，我是客户端: ${System.currentTimeMillis()}")
+                println("客户端连接成功: ${socket.remoteAddress()}")
+//                socket.write("你好，我是客户端: ${System.currentTimeMillis()}")
+                socket.write("AA 21 00 01 EE")
                 socket.handler { buffer ->
+                    println("收到服务器消息: ${buffer.length()}")
                     val mgs = buffer.toString(Charset.defaultCharset())
                     println("收到服务器消息: $mgs")
                 }
-                socket.closeHandler{
+                socket.closeHandler {
                     println("连接关闭: ${socket.remoteAddress()}")
                 }
             } else {
