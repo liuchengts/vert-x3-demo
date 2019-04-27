@@ -28,12 +28,13 @@ class TCPClientApplication {
         client.connect(PORT, HOST) { conn ->
             if (conn.succeeded()) {
                 val socket = conn.result()
-                println("客户端连接成功: ${socket.remoteAddress()}")
-//                socket.write("你好，我是客户端: ${System.currentTimeMillis()}")
-                socket.write("AA 21 00 01 EE")
+                val clientId = socket.remoteAddress().toString()
+                println("客户端连接成功: $clientId")
+                val sendBytes = clientId.toByteArray()
+                socket.write(StringUtils.bytesToHex(sendBytes))
                 socket.handler { buffer ->
-                    println("收到服务器消息: ${buffer.length()}")
-                    val mgs = buffer.toString(Charset.defaultCharset())
+                    //                    val mgs = buffer.toString(Charset.defaultCharset())
+                    val mgs = StringUtils.bytesToHex(buffer.bytes)
                     println("收到服务器消息: $mgs")
                 }
                 socket.closeHandler {

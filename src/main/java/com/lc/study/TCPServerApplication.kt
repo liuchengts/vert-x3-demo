@@ -1,8 +1,6 @@
 package com.lc.study
 
 import io.vertx.core.Vertx
-import io.vertx.core.buffer.Buffer
-import java.nio.charset.Charset
 
 
 class TCPServerApplication {
@@ -25,9 +23,11 @@ class TCPServerApplication {
         val server = vertx!!.createNetServer()
         server.connectHandler { socket ->
             socket.handler { buffer ->
-                val mgs = buffer.toString(Charset.defaultCharset())
+                //                val mgs = buffer.toString(Charset.defaultCharset())
+                val mgs = StringUtils.bytesToHex(buffer.bytes)
                 println("收到内容: $mgs")
-                socket.write("服务器应答: $mgs")
+                val sendBytes = "response: $mgs".toByteArray()
+                socket.write(StringUtils.bytesToHex(sendBytes))
             }
             socket.closeHandler {
                 println("连接关闭: ${socket.remoteAddress()}")
@@ -41,6 +41,7 @@ class TCPServerApplication {
             }
         }
     }
+
 
 //    fun server() {
 //        val vertx = Vertx.vertx()
